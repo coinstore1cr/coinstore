@@ -1,0 +1,74 @@
+<div class="app-container">
+    <header class="header">
+      <h1>Register</h1>
+    </header>
+
+    <main class="main-content">
+      <div class="logo-container">
+        <img src="assets/images/logo.png" alt="Coinstore" class="logo" />
+      </div>
+
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
+        <div class="form-group">
+          <label>
+            <span class="required">*</span>
+            Email Address
+          </label>
+          <input 
+            type="email" 
+            formControlName="email"
+            placeholder="Please Enter Your Email Account"
+            [class.error]="isFieldInvalid('email')"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>
+            <span class="required">*</span>
+            Password
+          </label>
+          <input 
+            type="password" 
+            formControlName="password"
+            placeholder="The New Password Must Consist of 6-16 Letters And Numbers"
+            [class.error]="isFieldInvalid('password')"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>
+            <span class="required">*</span>
+            Confirm Password
+          </label>
+          <input 
+            type="password" 
+            formControlName="confirmPassword"
+            placeholder="Please Enter The Password Again"
+            [class.error]="isFieldInvalid('confirmPassword')"
+          />
+        </div>
+
+        <div class="form-group">
+          <label>
+            <span class="required">*</span>
+            Invitation Code
+          </label>
+          <input 
+            type="text" 
+            formControlName="invitationCode"
+            placeholder="Please Enter The Invitation Code"
+            [class.error]="isFieldInvalid('invitationCode')"
+          />
+        </div>
+
+        <button type="submit" class="register-button" [disabled]="registerForm.invalid">
+          Register
+        </button>
+
+        <div class="form-footer">
+          <a href="#" class="footer-link">Email Registration</a>
+          <a routerLink="/login" class="footer-link">Login</a>
+        </div>
+      </form>
+    </main>
+  </div>

@@ -1,0 +1,39 @@
+<main class="main-content">
+  <div *ngIf="countdown>0; else noData">
+    
+    <div class="trade-data-row">
+      <span class="trade-data-label">Name:</span>
+      <span class="trade-data-value">{{ orderData.name }}</span>
+    </div>
+    <!-- <div class="trade-data-row">
+      <span class="trade-data-label">Term Code:</span>
+      <span class="trade-data-value">{{ orderData.termCode }}</span>
+    </div> -->
+    <div class="trade-data-row">
+      <span class="trade-data-label">Opening Time:</span>
+      <span class="trade-data-value">{{ orderData.openingTime }}</span>
+    </div>
+    <div class="trade-data-row">
+      <span class="trade-data-label">Opening Price:</span>
+      <span class="trade-data-value">{{ orderData.btcPrice }}</span>
+    </div>
+    <div class="trade-data-row">
+      <span class="trade-data-label">Direction</span>
+      <span class="trade-data-value">{{ orderData.direction }}</span>
+    </div>
+    <div class="trade-data-row">
+      <span class="trade-data-label">Time:</span>
+      <span class="trade-data-value">{{ countdown }}</span>
+    </div>
+    
+    <div class="trade-data-row">
+      <span class="trade-data-label">Buy Amount:</span>
+      <span class="trade-data-value">{{ orderData.amount }}</span>
+    </div>
+  </div>
+
+  <ng-template #noData class="noData">
+    <img src="assets/images/empty-image.png">
+    <p>No Data</p>
+  </ng-template>
+</main>

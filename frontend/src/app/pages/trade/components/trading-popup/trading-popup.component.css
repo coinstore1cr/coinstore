@@ -1,0 +1,157 @@
+.trading-popup {
+    
+    position: fixed;  /* Add this */
+    bottom: 10vh;        /* Add this */
+    left: 0;          /* Add this */
+    right: 0;         /* Add this */
+    z-index: 1000;    /* Add this */
+    border-radius: 8px 8px 0 0;  /* Modify this */
+    
+    /* Existing styles below */
+    color: #fff;
+    padding: 20px;
+    width: 100%;
+    max-width: 100%;
+    animation: slideUp 0.3s ease-out;
+
+    
+    .popup-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+  
+      .pair-info {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+  
+        .pair {
+          font-size: 18px;
+          font-weight: 500;
+        }
+  
+        .direction.up {
+          color: #02C076;
+        }
+        .direction.down {
+          color: #bc2532;
+        }
+      }
+  
+      .cancel-btn {
+        background: none;
+        border: none;
+        color: #848E9C;
+        cursor: pointer;
+        
+        &:hover {
+          color: #fff;
+        }
+      }
+    }
+  
+    .scale-options {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 20px;
+  
+      .scale-option {
+        flex: 1;
+        background-color: #2b3139;
+        border-radius: 4px;
+        padding: 12px;
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+  
+        &.active {
+          border: 1px solid #02C076;
+        }
+  
+        .time {
+          display: block;
+          text-align: center;
+          font-size: 16px;
+          margin-bottom: 4px;
+        }
+  
+        .percentage {
+          display: block;
+          text-align: center;
+          color: #02C076;
+          font-size: 14px;
+        }
+  
+        .progress-indicator {
+          position: absolute;
+          bottom: 0;
+          left: 0;
+          height: 3px;
+          width: 100%;
+          background-color: #02C076;
+        }
+      }
+    }
+  
+    .amount-section {
+      margin-bottom: 20px;
+  
+      .amount-header {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        color: #848E9C;
+      }
+  
+      .amount-input {
+        width: 100%;
+        background-color: #2b3139;
+        border: 1px solid #2b3139;
+        color: #fff;
+        padding: 12px;
+        border-radius: 4px;
+        font-size: 16px;
+  
+        &:focus {
+          outline: none;
+          border-color: #02C076;
+        }
+      }
+    }
+  
+    .balance-row {
+      display: flex;
+      justify-content: space-between;
+      color: #848E9C;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+  
+    .submit-btn {
+      width: 100%;
+      background-color: #02C076;
+      color: #fff;
+      border: none;
+      padding: 14px;
+      border-radius: 4px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.2s;
+  
+      &:hover {
+        background-color: darken(#02C076, 5%);
+      }
+  
+      &:disabled {
+        background-color: #2b3139;
+        cursor: not-allowed;
+      }
+    }
+  }
+
+  .error-message {
+    color: red;
+    font-size: 14px;
+    margin-top: 10px;
+  }
