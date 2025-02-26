@@ -15,7 +15,7 @@ const app = express();
 // Middleware
 app.use(
   cors({
-    origin: "http://localhost:4200", // Angular dev server
+    origin: "https://coinstorect.site", // Angular dev server
     credentials: true, // Allow credentials (cookies)
   })
 );
@@ -35,7 +35,7 @@ mongoose
 // Counter Schema for UID Auto-Increment
 const counterSchema = new mongoose.Schema({
   _id: { type: String, required: true },
-  seq: { type: Number, default: 10510 },
+  seq: { type: Number, default: 1010 },
 });
 const Counter = mongoose.model("Counter", counterSchema);
 
