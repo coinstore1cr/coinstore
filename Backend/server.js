@@ -13,11 +13,18 @@ dotenv.config();
 const app = express();
 
 // Middleware
+const allowedOrigins = ["https://coinstorect.site", "http://localhost:4200"];
 app.use(
-  cors({
-    origin: "https://coinstorect.site", // Angular dev server
-    credentials: true, // Allow credentials (cookies)
-  })
+    cors({
+        origin: (origin, callback) => {
+            if (allowedOrigins.includes(origin) {
+                callback(null, true);
+            } else {
+                callback(new Error("Not allowed by CORS"));
+            }
+        },
+        credentials: true,
+    })
 );
 app.use(bodyParser.json());
 
@@ -76,7 +83,7 @@ const generateToken = (user) => {
   return jwt.sign(
     { id: user._id, uid: user.uid, email: user.email }, // Payload
     process.env.JWT_SECRET, // Secret key
-    { expiresIn: process.env.JWT_EXPIRES_IN || "5h" } // Expiration
+    { expiresIn: process.env.JWT_EXPIRES_IN || "1h" } // Expiration
   );
 };
 
