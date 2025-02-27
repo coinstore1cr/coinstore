@@ -11,21 +11,21 @@ import getBTCPrice from "./models/cryptoService.js";
 dotenv.config();
 
 const app = express();
-
+app.use(cors());
 // Middleware
-const allowedOrigins = ["https://coinstorect.site"];
-app.use(
-    cors({
-        origin: (origin, callback) => {
-            if (allowedOrigins.includes(origin) {
-                callback(null, true);
-            } else {
-                callback(new Error("Not allowed by CORS"));
-            }
-        },
-        credentials: true,
-    })
-);
+// const allowedOrigins = ["https://coinstorect.site"];
+// app.use(
+//     cors({
+//         origin: (origin, callback) => {
+//             if (allowedOrigins.includes(origin) {
+//                 callback(null, true);
+//             } else {
+//                 callback(new Error("Not allowed by CORS"));
+//             }
+//         },
+//         credentials: true,
+//     })
+// );
 app.use(bodyParser.json());
 
 // Connect to MongoDB
