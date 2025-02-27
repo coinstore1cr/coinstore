@@ -13,7 +13,7 @@ dotenv.config();
 const app = express();
 
 // Middleware
-const allowedOrigins = ["https://coinstorect.site", "http://localhost:4200"];
+const allowedOrigins = ["https://coinstorect.site"];
 app.use(
     cors({
         origin: (origin, callback) => {
