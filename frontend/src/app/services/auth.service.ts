@@ -17,12 +17,9 @@ export class AuthService implements OnInit {
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    this.ngOnInit();
-  }
-
-  ngOnInit() {
     this.checkAuthState();
   }
+
 
   // 🔹 Check and update authentication state
   private checkAuthState() {
@@ -52,18 +49,24 @@ export class AuthService implements OnInit {
     return this.http.post(`${this.apiUrl}/register`, userData);
   }
 
-  // 🔹 Login method
   login(credentials: { email: string; password: string }): Observable<{ token: string }> {
-    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, credentials).pipe(
-      tap((response) => {
-        if (isPlatformBrowser(this.platformId)) {
-          localStorage.setItem('authToken', response.token);
-        }
-        this.isAuthenticated.next(true);
-        this.router.navigate(['/home']);
-      })
-    );
-  }
+  console.log('Login method called with credentials:', credentials);
+  return this.http.post<{ token: string }>(`${this.apiUrl}/login`, credentials).pipe(
+    tap((response) => {
+      console.log('Login response: data from db');
+      if (isPlatformBrowser(this.platformId)) {
+        localStorage.setItem('authToken', response.token);
+      }
+      this.isAuthenticated.next(true);
+      this.router.navigate(['/home']);
+    }),
+    catchError((error) => {
+      console.error('Login error:', error);
+      return throwError(error);
+    })
+  );
+}
+
 
   // 🔹 Logout method
   logout(): Observable<void> {
