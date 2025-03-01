@@ -29,14 +29,23 @@ export class LogInComponent {
 
  
 
-  onSubmit() {
-    if (this.loginForm.valid) {
-      this.authService.login({
-        email: this.loginForm.value.email,
-        password: this.loginForm.value.password
-      });
-    }
+onSubmit() {
+  if (this.loginForm.valid) {
+    this.authService.login({
+      email: this.loginForm.value.email,
+      password: this.loginForm.value.password
+    }).subscribe({
+      next: (response) => {
+        console.log('Login successful');
+      },
+      error: (error) => {
+        console.error('Login failed', error);
+      }
+    });
   }
+}
+
+
 
   
 }
