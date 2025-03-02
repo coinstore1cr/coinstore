@@ -1,14 +1,16 @@
-import { Injectable, Inject, PLATFORM_ID, OnInit } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { environment } from '../../environments/environment';
 import { BehaviorSubject, Observable, tap, of } from 'rxjs';
+import { catchError } from 'rxjs/operators'; // Import catchError
+import { throwError } from 'rxjs'; // Import throwError
 import { isPlatformBrowser } from '@angular/common';
 
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService implements OnInit {
+export class AuthService { // Removed "implements OnInit"
   private apiUrl = environment.apiUrl;
   private isAuthenticated = new BehaviorSubject<boolean>(false);
 
@@ -17,11 +19,9 @@ export class AuthService implements OnInit {
     private router: Router,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
-    this.checkAuthState();
+    this.checkAuthState(); // Initialization in constructor
   }
 
-
-  // 🔹 Check and update authentication state
   private checkAuthState() {
     if (isPlatformBrowser(this.platformId)) {
       const token = localStorage.getItem('authToken');
@@ -29,46 +29,39 @@ export class AuthService implements OnInit {
     }
   }
 
-  // 🔹 Observable for authentication status
   get authStatus(): Observable<boolean> {
     return this.isAuthenticated.asObservable();
   }
 
-  // 🔹 Check if user is logged in
   get isLoggedIn(): boolean {
     return isPlatformBrowser(this.platformId) && !!localStorage.getItem('authToken');
   }
 
-  // 🔹 Get the auth token safely
   getToken(): string | null {
     return isPlatformBrowser(this.platformId) ? localStorage.getItem('authToken') : null;
   }
 
-  // 🔹 Register a new user
   register(userData: any) {
     return this.http.post(`${this.apiUrl}/register`, userData);
   }
 
   login(credentials: { email: string; password: string }): Observable<{ token: string }> {
-  console.log('Login method called with credentials:', credentials);
-  return this.http.post<{ token: string }>(`${this.apiUrl}/login`, credentials).pipe(
-    tap((response) => {
-      console.log('Login response: data from db');
-      if (isPlatformBrowser(this.platformId)) {
-        localStorage.setItem('authToken', response.token);
-      }
-      this.isAuthenticated.next(true);
-      this.router.navigate(['/home']);
-    }),
-    catchError((error) => {
-      console.error('Login error:', error);
-      return throwError(error);
-    })
-  );
-}
+    return this.http.post<{ token: string }>(`${this.apiUrl}/login`, credentials).pipe(
+      tap((response) => {
+        if (isPlatformBrowser(this.platformId)) {
+          localStorage.setItem('authToken', response.token);
+          console.log('Token stored:', response.token); // Debug
+        }
+        this.isAuthenticated.next(true);
+        this.router.navigate(['/home']);
+      }),
+      catchError((error: any) => { // Explicitly typed error
+        console.error('Login error:', error);
+        return throwError(error); // Return observable error
+      })
+    );
+  }
 
-
-  // 🔹 Logout method
   logout(): Observable<void> {
     if (isPlatformBrowser(this.platformId)) {
       localStorage.removeItem('authToken');
@@ -76,6 +69,6 @@ export class AuthService implements OnInit {
     }
     this.isAuthenticated.next(false);
     this.router.navigate(['/login']);
-    return of(undefined);
+    return of(undefined); // Assuming 'of' is imported elsewhere; if not, import from 'rxjs'
   }
 }
