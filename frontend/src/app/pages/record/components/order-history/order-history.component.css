@@ -1,0 +1,75 @@
+.loading-message,
+.error-message,
+.no-orders-message {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 18px;
+}
+
+.error-message {
+  color: red;
+}
+
+.no-orders-message {
+  color: #666;
+}
+
+.order-history-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.order-card {
+  background-color: #1e2329;
+  border-bottom: 1px solid #1e2329;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.order-details {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between; /* Align label on left and value on right */
+  
+ 
+}
+
+.detail-row:last-child {
+  border-bottom: none;
+}
+
+.detail-label {
+  font-weight: bold;
+  color: #fff;
+  text-align: left; /* Align label text to the left */
+}
+
+.detail-value {
+  color: #fff;
+  text-align: right; /* Align value text to the right */
+}
+
+.profit {
+  color: green;
+}
+
+.loss {
+  color: red;
+}
+
+.green{
+  color: green;
+  font-weight: bold;
+}
+.red {
+  color: darkred;
+  font-weight: bold;
+}

@@ -1,0 +1,51 @@
+<div class="login-container">
+  <header class="header">
+    <h1>Login</h1>
+  </header>
+
+
+  <main class="main-content">
+    <div class="logo">
+      <img src="assets/images/logo.png" alt="Coinstore Logo" />
+    </div>
+    
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input 
+          type="email" 
+          id="email"
+          formControlName="email"
+          class="form-control"
+        />
+      </div>
+
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input 
+          type="password" 
+          id="password"
+          formControlName="password"
+          class="form-control"
+          placeholder="Please Enter Password"
+        />
+      </div>
+
+      <div class="remember-account">
+        <label class="checkbox-container">
+          <input type="checkbox" formControlName="rememberAccount">
+          <span class="checkmark"></span>
+          Remember Account
+        </label>
+      </div>
+
+      <button type="submit" class="login-button" [disabled]="!loginForm.valid">
+        Login
+      </button>
+
+      <div class="form-footer">
+        <a routerLink="/signup" class="login-link">Sign Up Now</a>
+      </div>
+    </form>
+    </main>
+  </div>

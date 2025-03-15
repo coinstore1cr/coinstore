@@ -1,0 +1,78 @@
+<div class="profile-container">
+    <span class="vip-badge">VIP{{userData.vipLevel}}</span>
+    <!-- Profile Header -->
+    <div class="profile-header">
+      <div class="avatar-container">
+        <img src="assets/images/flag.png" alt="Indian Flag" class="avatar">
+        
+      </div>
+      <div class="user-info">
+        <p class="email">{{ userData?.email || 'Loading...' }}</p>
+        <p class="uid">UID: {{ userData?.uid || 'Loading...' }}</p>
+        <p class="credit-score">Crd Score:100 {{userData.creditScore}}</p>
+      </div>
+    </div>
+  
+    <!-- Assets Section -->
+    <div class="assets-section">
+      <div class="assets-header">
+        <h2>My assets</h2>
+        <div class="action-buttons">
+          <button class="icon-button"><img src="assets/images/eye-o.png" alt="eye img" class="eye"></button>
+          <button class="icon-button-refresh" (click)="refreshBalance()"></button>
+        </div>
+      </div>
+      <div class="balance-info">
+        <h1>{{ userData?.balance  }}</h1>
+        <p>~{{ (userData?.balance || 0).toFixed(8) }} INR</p>
+      </div>
+    </div>
+  
+    <!-- Navigation Menu -->
+    <div class="nav-menu">
+      <div class="nav-item">
+        <img src="assets/images/deposit.png"  class="nav-icon">
+        <span class="nav-label">Deposit</span>
+        <span class="nav-arrow">›</span>
+      </div>
+      <div class="nav-item">
+        <img src="assets/images/information.png"  class="nav-icon">
+        <span class="nav-label">Informations</span>
+        <span class="nav-arrow">›</span>
+      </div>
+      <div class="nav-item">
+        <img src="assets/images/service.png"  class="nav-icon">
+        <span class="nav-label">Services</span>
+        <span class="nav-arrow">›</span>
+      </div>
+    </div>
+
+    <div class="nav-menu">
+        <div class="nav-item">
+          <img src="assets/images/subordinates.png"  class="nav-icon">
+          <span class="nav-label">My Subordinates</span>
+          <span class="nav-arrow">›</span>
+        </div>
+        <div class="nav-item">
+          <img src="assets/images/common.png"  class="nav-icon">
+          <span class="nav-label">Common Problem</span>
+          <span class="nav-arrow">›</span>
+        </div>
+       
+      </div>
+    <div class="nav-menu">
+        <div class="nav-item">
+          <img src="assets/images/setting.png"  class="nav-icon">
+          <span class="nav-label">Setting</span>
+          <span class="nav-arrow">›</span>
+        </div>
+        <div class="nav-item">
+          <img src="assets/images/logout.png"  class="nav-icon">
+          <span class="nav-label" (click)="logout()">Logout</span>
+          <span class="nav-arrow">›</span>
+        </div>
+       
+      </div>
+  
+   
+  </div>

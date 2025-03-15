@@ -1,0 +1,55 @@
+.main-content {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+   /* Center items horizontally */
+    height: 100vh; /* Take the full height of the viewport */
+    /* Center text if applicable */
+    font-family: din, Helvetica, Arial, "Roboto,PingFang SC", sans-serif;
+    padding: 20px;
+  }
+  
+  .main-content img {
+    max-width: 100%; /* Prevent image from overflowing */
+    height: auto; /* Maintain aspect ratio */
+    margin-bottom: 10px; /* Add spacing below the image */
+  }
+  
+  .main-content p {
+    font-size: 16px; /* Adjust text size */
+    color: white; /* Optional: Set text color */
+  }
+  
+
+
+
+  
+  /* Container for each row */
+  .trade-data-row {
+    display: flex;
+    justify-content: space-between; /* Space between text and value */
+     /* Vertically center the content */
+    margin-bottom: 10px; /* Space between rows */
+  }
+  
+  /* Style for the labels (text on the left) */
+  .trade-data-label {
+    font-weight: bold;
+    color: white; /* Dark gray color for labels */
+    text-align: left;
+  }
+  
+  /* Style for the values (text on the right) */
+  .trade-data-value {
+    color: white; /* Light gray color for values */
+    text-align: right;
+  }
+
+  .noData {
+    align-items: center;        /* Center children vertically */
+    justify-content: center;    /* Center children horizontally */
+    height: 150px;             /* Fixed height */
+    width: 150px;              /* Fixed width */
+    display: flex;             /* Enable Flexbox to use align-items and justify-content */
+    margin: 0 auto;            /* Center horizontally within parent if parent has width */
+    margin-top: 35%;
+  }

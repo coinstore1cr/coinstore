@@ -1,0 +1,62 @@
+<div *ngIf="isLoading" class="loading-message">
+  Loading orders...
+</div>
+
+<div *ngIf="error" class="error-message">
+  {{ error }}
+</div>
+
+<div *ngIf="orders.length > 0" class="order-history-container">
+  <div *ngFor="let order of orders" class="order-card">
+    <div class="order-details">
+      <div class="detail-row">
+        <span class="detail-label">Name: </span>
+        <span class="detail-value">{{ order.name }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Term Code:</span>
+        <span class="detail-value">{{ order.termCode }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Opening Price:</span>
+        <span class="detail-value">{{ order.openingPrice }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Delivery Price:</span>
+        <span class="detail-value">{{ order.closingPrice }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Direction:</span>
+        <span class="detail-value" [ngClass]="{'green': order.direction === 'up', 'red': order.direction === 'down'}">
+          {{ order.direction }}
+        </span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Time:</span>
+        <span class="detail-value">{{ order.time }}S</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Buy Amount:</span>
+        <span class="detail-value">{{ order.buyAmount }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Opening Time:</span>
+        <span class="detail-value">{{ order.openingTime | date: 'yyyy/MM/dd HH:mm:ss' }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Delivery Time:</span>
+        <span class="detail-value">{{ order.closingTime | date: 'yyyy/MM/dd HH:mm:ss' }}</span>
+      </div>
+      <div class="detail-row">
+        <span class="detail-label">Profit And Loss:</span>
+        <span class="detail-value" [ngClass]="{'green': order.profitLoss >=0, 'red': order.profitLoss <0}">
+          {{ order.profitLoss }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div *ngIf="orders.length === 0 && !isLoading && !error" class="no-orders-message">
+  <p>No orders found.</p>
+</div>

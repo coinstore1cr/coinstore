@@ -1,0 +1,43 @@
+<div class="app-container">
+  <header class="top-header">
+    <button class="back-button" routerLink="/trade">
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        width="24"
+        height="24"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+      >
+        <path d="M15 18l-6-6 6-6" />
+      </svg>
+    </button>
+    <h1>Order History</h1>
+  </header>
+
+  <nav class="tab-nav">
+    <a
+      routerLink="/record/open-order"
+      routerLinkActive="active"
+      class="tab-link"
+      [class.active]="isActive('open-order')"
+      (click)="setActiveTab('open-order')"
+      >Open Order</a
+    >
+    <a
+      routerLink="/record/order-history"
+      routerLinkActive="active"
+      class="tab-link"
+      [class.active]="isActive('order-history')"
+      (click)="setActiveTab('order-history')"
+      >Order History</a
+    >
+  </nav>
+
+  <main class="main-content">
+    <router-outlet></router-outlet>
+  </main>
+</div>

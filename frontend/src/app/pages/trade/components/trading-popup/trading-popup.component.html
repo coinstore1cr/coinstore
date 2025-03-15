@@ -1,0 +1,69 @@
+<div class="trading-popup">
+  <header class="popup-header">
+    <div class="pair-info">
+      <span class="pair">BTC/USDT</span>
+      <span
+        class="direction"
+        [class.up]="currentDirection === 'up'"
+        [class.down]="currentDirection === 'down'"
+      >
+        {{ currentDirection | uppercase }}
+      </span>
+    </div>
+    <button class="cancel-btn" (click)="onCancel()">Cancel</button>
+  </header>
+
+  <div class="scale-options">
+    <div
+      class="scale-option"
+      [class.active]="selectedScale === 180"
+      (click)="selectScale(180)"
+    >
+      <span class="time">180S</span>
+      <span class="percentage">Scale30%</span>
+      <div class="progress-indicator"></div>
+    </div>
+    <div
+      class="scale-option"
+      [class.active]="selectedScale === 120"
+      (click)="selectScale(120)"
+    >
+      <span class="time">120S</span>
+      <span class="percentage">Scale40%</span>
+      <div class="progress-indicator"></div>
+    </div>
+    <div
+      class="scale-option"
+      [class.active]="selectedScale === 60"
+      (click)="selectScale(60)"
+    >
+      <span class="time">60S</span>
+      <span class="percentage">Scale60%</span>
+      <div class="progress-indicator"></div>
+    </div>
+  </div>
+
+  <div class="amount-section">
+    <div class="amount-header">
+      <span>Amount</span>
+      <span class="handling-fee">Handling Fee:0%</span>
+    </div>
+    <input
+      type="number"
+      class="amount-input"
+      [(ngModel)]="amount"
+      [min]="minimumAmount"
+      placeholder="Minimum Amount 100"
+      (ngModelChange)="calculateEstimatedEarnings()"
+    />
+  </div>
+  <div *ngIf="errorMessage" class="error-message">
+    {{ errorMessage }}
+  </div>
+  <div class="balance-row">
+    <span>Balance:{{ balance }}</span>
+    <span>Estimated Earnings:{{ estimatedEarnings }}</span>
+  </div>
+
+  <button class="submit-btn" (click)="onSubmit()">Submit</button>
+</div>
