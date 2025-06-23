@@ -1,19 +1,21 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterOutlet, Router, NavigationEnd } from '@angular/router';
 import { BottomNavComponent } from './components/bottom-nav/bottom-nav.component';
 import { ConfirmationService } from 'primeng/api';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { NgIf } from '@angular/common';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, BottomNavComponent, ConfirmDialogModule],
+  imports: [RouterOutlet, BottomNavComponent, ConfirmDialogModule, NgIf],
   providers: [ConfirmationService],
   template: `
     <div class="app-container">
       <p-confirmDialog [baseZIndex]="10000" [dismissableMask]="true"></p-confirmDialog>
       <router-outlet />
-      <app-bottom-nav />
+      <app-bottom-nav *ngIf="showBottomNav" />
     </div>
   `,
   styles: [`
@@ -70,5 +72,20 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
   `]
 })
 export class AppComponent {
-  constructor(private confirmationService: ConfirmationService) {}
+  showBottomNav = true;
+
+  constructor(private confirmationService: ConfirmationService, private router: Router) {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe(() => {
+      this.showBottomNav = !this.isAuthPage();
+    });
+    // Initial check
+    this.showBottomNav = !this.isAuthPage();
+  }
+
+  isAuthPage(): boolean {
+    const path = this.router.url;
+    return path.startsWith('/login') || path.startsWith('/signup');
+  }
 }
