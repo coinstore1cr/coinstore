@@ -4,7 +4,7 @@ import bcrypt from 'bcrypt';
 // Counter Schema for UID Auto-Increment
 const counterSchema = new mongoose.Schema({
     _id: { type: String, required: true },
-    seq: { type: Number, default: 70571 },
+    seq: { type: Number, default: 75604 }, // Set to 75604 so first user gets 75605
 });
 const Counter = mongoose.model("Counter", counterSchema);
 
@@ -22,20 +22,16 @@ const userSchema = new mongoose.Schema({
 userSchema.pre("save", async function (next) {
     if (this.isNew) {
         try {
-            const counter = await Counter.findOneAndUpdate(
+            let counter = await Counter.findOne({ _id: "userId" });
+            if (!counter) {
+                // Create the counter with the desired starting value
+                counter = await Counter.create({ _id: "userId", seq: 75604 });
+            }
+            counter = await Counter.findOneAndUpdate(
                 { _id: "userId" },
                 { $inc: { seq: 1 } },
-                { 
-                    new: true, 
-                    upsert: true,
-                    setDefaultsOnInsert: true 
-                }
+                { new: true }
             );
-            
-            if (!counter) {
-                throw new Error('Failed to get or create counter');
-            }
-            
             this.uid = counter.seq;
         } catch (error) {
             return next(error);
