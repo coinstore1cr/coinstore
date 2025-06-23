@@ -256,11 +256,8 @@ app.post('/refresh-token', authenticateToken, async (req, res) => {
   }
 });
 
-// Remove the following lines:
-// const PORT = process.env.PORT || 3000;
-// app.listen(PORT, () => {
-//   console.log(`Server is running on port ${PORT}`);
-// });
-
-// Add this line for Vercel:
-export default app;
+// Start Server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
+});
