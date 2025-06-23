@@ -1,15 +1,16 @@
 <div class="profile-container">
-    <span class="vip-badge">VIP{{userData.vipLevel}}</span>
+    <span class="vip-badge">VIP{{userData?.vipLevel}}</span>
     <!-- Profile Header -->
     <div class="profile-header">
       <div class="avatar-container">
         <img src="assets/images/flag.png" alt="Indian Flag" class="avatar">
-        
       </div>
       <div class="user-info">
-        <p class="email">{{ userData?.email || 'Loading...' }}</p>
-        <p class="uid">UID: {{ userData?.uid || 'Loading...' }}</p>
-        <p class="credit-score">Crd Score:100 {{userData.creditScore}}</p>
+        <b>
+          <p class="email">{{ userData?.email || 'Loading...' }}</p>
+          <p class="uid">UID: {{ userData?.uid || 'Loading...' }}</p>
+          <p class="credit-score">Crd Score:100 {{userData?.creditScore}}</p>
+        </b>
       </div>
     </div>
   
@@ -23,56 +24,61 @@
         </div>
       </div>
       <div class="balance-info">
-        <h1>{{ userData?.balance  }}</h1>
-        <p>~{{ (userData?.balance || 0).toFixed(8) }} INR</p>
+        <p><b>{{ userData?.balance }}</b></p>
+        <p>={{ (userData?.balance || 0).toFixed(8) }} INR</p>
       </div>
     </div>
   
     <!-- Navigation Menu -->
     <div class="nav-menu">
       <div class="nav-item">
-        <img src="assets/images/deposit.png"  class="nav-icon">
+        <img src="assets/images/deposit.png" class="nav-icon" alt="deposit">
         <span class="nav-label">Deposit</span>
         <span class="nav-arrow">›</span>
       </div>
       <div class="nav-item">
-        <img src="assets/images/information.png"  class="nav-icon">
+        <img src="assets/images/information.png" class="nav-icon" alt="information">
         <span class="nav-label">Informations</span>
         <span class="nav-arrow">›</span>
       </div>
       <div class="nav-item">
-        <img src="assets/images/service.png"  class="nav-icon">
+        <img src="assets/images/service.png" class="nav-icon" alt="service">
         <span class="nav-label">Services</span>
         <span class="nav-arrow">›</span>
       </div>
     </div>
 
     <div class="nav-menu">
-        <div class="nav-item">
-          <img src="assets/images/subordinates.png"  class="nav-icon">
-          <span class="nav-label">My Subordinates</span>
-          <span class="nav-arrow">›</span>
-        </div>
-        <div class="nav-item">
-          <img src="assets/images/common.png"  class="nav-icon">
-          <span class="nav-label">Common Problem</span>
-          <span class="nav-arrow">›</span>
-        </div>
-       
+      <div class="nav-item">
+        <img src="assets/images/subordinates.png" class="nav-icon" alt="subordinates">
+        <span class="nav-label">My Subordinates</span>
+        <span class="nav-arrow">›</span>
       </div>
+      <div class="nav-item">
+        <img src="assets/images/common.png" class="nav-icon" alt="common">
+        <span class="nav-label">Common Problem</span>
+        <span class="nav-arrow">›</span>
+      </div>
+    </div>
+
     <div class="nav-menu">
         <div class="nav-item">
-          <img src="assets/images/setting.png"  class="nav-icon">
+          <img src="assets/images/setting.png" class="nav-icon" alt="settings">
           <span class="nav-label">Setting</span>
           <span class="nav-arrow">›</span>
         </div>
-        <div class="nav-item">
-          <img src="assets/images/logout.png"  class="nav-icon">
-          <span class="nav-label" (click)="logout()">Logout</span>
+        <div class="nav-item logout-item" (click)="logout()">
+          <img src="assets/images/logout.png" class="nav-icon" alt="logout">
+          <span class="nav-label">Logout</span>
           <span class="nav-arrow">›</span>
         </div>
-       
-      </div>
-  
-   
-  </div>
+    </div>
+</div>
+
+<app-logout-dialog 
+  *ngIf="showLogoutDialog"
+  (confirm)="onLogoutConfirm()"
+  (cancel)="onLogoutCancel()">
+</app-logout-dialog>
+
+<p-toast position="top-center"></p-toast>

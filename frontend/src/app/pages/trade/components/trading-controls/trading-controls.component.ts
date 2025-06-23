@@ -1,18 +1,18 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-trading-controls',
   standalone: true,
-  imports: [CommonModule,RouterModule],
+  imports: [CommonModule, RouterModule],
   template: `
     <div class="controls-container">
-      <button routerLink="/tradingpopup" class="control-button up" (click)="navigateWithDirection('up');placeTrade('up') " >
+      <button class="control-button up" (click)="placeTrade('up')">
         Up
       </button>
-      <button routerLink="/tradingpopup" class="control-button down" (click)="navigateWithDirection('down');placeTrade('down')">
+      <button class="control-button down" (click)="placeTrade('down')">
         Down
       </button>
     </div>
@@ -56,17 +56,23 @@ import { Router } from '@angular/router';
   `]
 })
 export class TradingControlsComponent {
-
-  
-  
-  constructor(private router: Router) {}
-
-  navigateWithDirection(direction: 'up' | 'down') {
-    this.router.navigate(['/tradingpopup'], {
-      queryParams: { direction }
-    });
-  }
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
 
   placeTrade(direction: 'up' | 'down') {
+    // Get the current coin parameters from the route
+    this.route.queryParams.subscribe(params => {
+      this.router.navigate(['/tradingpopup'], {
+        queryParams: { 
+          direction,
+          symbol: params['symbol'] || 'BTC',
+          name: params['name'] || 'Bitcoin',
+          price: params['price'],
+          change: params['change']
+        }
+      });
+    });
   }
 }

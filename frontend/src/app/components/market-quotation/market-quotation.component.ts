@@ -27,7 +27,7 @@ interface MarketData {
           <div>24h Change</div>
         </div>
         <div *ngFor="let item of marketData" class="table-row">
-          <div class="name-cell" (click)="navigateToTrade(item.symbol)">
+          <div class="name-cell" (click)="navigateToTrade(item)">
             <img [src]="item.icon" [alt]="item.name" class="crypto-icon">
             <span>{{item.symbol}}</span>
           </div>
@@ -107,11 +107,6 @@ interface MarketData {
 export class MarketQuotationComponent implements OnInit, OnDestroy {
   private subscription!: Subscription;
 
-  constructor(
-    private router: Router,
-    private http: HttpClient
-  ) {}
-
   marketData: MarketData[] = [
     { icon: 'assets/images/btc.png', name: 'Bitcoin', symbol: 'BTC', price: '0', change: '0%' },
     { icon: 'assets/images/xrp.png', name: 'Ripple', symbol: 'XRP', price: '0', change: '0%' },
@@ -128,6 +123,11 @@ export class MarketQuotationComponent implements OnInit, OnDestroy {
     { icon: 'assets/images/ens.png', name: 'Ethereum Name Service', symbol: 'ENS', price: '0', change: '0%' },
     { icon: 'assets/images/ada.png', name: 'Ada', symbol: 'ADA', price: '0', change: '0%' }
   ];
+
+  constructor(
+    private router: Router,
+    private http: HttpClient
+  ) {}
 
   ngOnInit() {
     this.fetchMarketData().subscribe(([priceData, changeData]) => {
@@ -169,7 +169,14 @@ export class MarketQuotationComponent implements OnInit, OnDestroy {
     });
   }
 
-  navigateToTrade(symbol: string) {
-    this.router.navigate(['/trade']);
+  navigateToTrade(item: MarketData) {
+    this.router.navigate(['/trade'], { 
+      queryParams: { 
+        symbol: item.symbol,
+        name: item.name,
+        price: item.price,
+        change: item.change
+      }
+    });
   }
 }

@@ -1,106 +1,80 @@
-// open-order.component.ts
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { SharedService } from '../../../../services/shared.service';
-import { orderService } from '../../../../services/order.service';
+import { OrderService, OrderResponse } from '../../../../services/order.service';
 import { CryptoService } from '../../../../services/crypto.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
-  selector: 'open-order',
+  selector: 'app-open-order',
   standalone: true,
   imports: [CommonModule],
   templateUrl: './open-order.component.html',
-  styleUrls: ['./open-order.component.css'],
+  styleUrls: ['./open-order.component.css']
 })
 export class OpenOrderComponent implements OnInit, OnDestroy {
-  orderData: any;
-  
-  countdown: number = 0; // Initialize to 0
-  countdownInterval: any;
+  orderData: OrderResponse | null = null;
+  timeLeft: number = 0;
+  timerInterval: any;
   closingBtcPrice: number = 0;
 
   constructor(
     private sharedService: SharedService,
+    private orderService: OrderService,
     private router: Router,
-    private orderService: orderService,
     private cryptoService: CryptoService
   ) {}
 
-  ngOnInit(): void {
-    // Retrieve orderData from SharedService
+  ngOnInit() {
     this.orderData = this.sharedService.getorderData();
-    
-
     if (!this.orderData) {
-      console.error('No order data found.');
       return;
     }
 
-    this.startCountdown();
+    // Calculate time left using expiryTime
+    if (this.orderData.expiryTime) {
+      const now = Date.now();
+      this.timeLeft = Math.max(0, Math.floor((this.orderData.expiryTime - now) / 1000));
+
+      // Start timer
+      this.timerInterval = setInterval(() => {
+        this.timeLeft = Math.max(0, this.timeLeft - 1);
+        if (this.timeLeft === 0) {
+          clearInterval(this.timerInterval);
+          this.router.navigate(['/record/open-order']);
+        }
+      }, 1000);
+    } else {
+      console.error('No expiry time found for order');
+      return;
+    }
+
+    // Get current BTC price
+    this.updateBTCPrice();
   }
 
-  startCountdown(): void {
-    this.countdown = this.orderData.time;
-
-    this.countdownInterval = setInterval(() => {
-      this.countdown--;
-
-      if (this.countdown <= 0) {
-        clearInterval(this.countdownInterval);
-        this.onCountdownEnd();
-      }
-    }, 1000);
-  }
-
-  async onCountdownEnd(): Promise<void> {
-    // Fetch closing BTC price
-    this.closingBtcPrice = await this.getCurrentBTCPrice();
-
-    // Add closing time and price to orderData
-    const finalOrderData = {
-      ...this.orderData,
-      closingTime: new Date().toISOString(),
-      closingBtcPrice: this.closingBtcPrice,
-    };
-
+  private async updateBTCPrice() {
     try {
-      const createdOrder = await this.orderService.createOrder(finalOrderData).toPromise();
+      const price = await firstValueFrom(this.cryptoService.getBTCPrice());
+      if (price !== undefined) {
+        this.closingBtcPrice = price;
+      }
     } catch (error) {
-      console.error('Failed to create order:', error);
+      console.error('Error getting BTC price:', error);
     }
   }
 
-  private async getCurrentBTCPrice(): Promise<number> {
-    return new Promise<number>((resolve, reject) => {
-      this.cryptoService.getBTCPrice().subscribe({
-        next: (price) => resolve(price),
-        error: (err) => reject(err),
-      });
-    });
-  }
-
-  ngOnDestroy(): void {
-    // Clear the orderData from SharedService when the component is destroyed
-    this.sharedService.updateorderData(null);
-    // Clear the interval if it exists
-    if (this.countdownInterval) {
-      clearInterval(this.countdownInterval);
+  ngOnDestroy() {
+    if (this.timerInterval) {
+      clearInterval(this.timerInterval);
     }
   }
 
-  // New method to format countdown in HH:MM:SS
-  formatCountdown(seconds: number): string {
-    if (seconds < 0) return '00:00:00'; // Handle negative values
-
+  formatTime(seconds: number): string {
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const remainingSeconds = seconds % 60;
-
-    const formattedHours = String(hours).padStart(2, '0');
-    const formattedMinutes = String(minutes).padStart(2, '0');
-    const formattedSeconds = String(remainingSeconds).padStart(2, '0');
-
-    return `${formattedHours}:${formattedMinutes}:${formattedSeconds}`;
+    return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
   }
 }

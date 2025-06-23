@@ -9,36 +9,46 @@
       <img src="assets/images/logo.png" alt="Coinstore Logo" />
     </div>
     
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-      <div class="form-group">
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="custom-login-form">
+      <div class="form-row">
         <label for="email">Email Address</label>
         <input 
           type="email" 
           id="email"
           formControlName="email"
-          class="form-control"
+          placeholder="Please Enter Your Email Account"
         />
       </div>
-
-      <div class="form-group">
+      <hr />
+      <div class="form-row">
         <label for="password">Password</label>
-        <input 
-          type="password" 
-          id="password"
-          formControlName="password"
-          class="form-control"
-          placeholder="Please Enter Password"
-        />
+        <div class="input-with-icon">
+          <input 
+            [type]="showPassword ? 'text' : 'password'"
+            id="password"
+            formControlName="password"
+            placeholder="Please Enter Password"
+          />
+          <span class="eye-icon" (click)="togglePasswordVisibility()">
+            <img src="assets/images/eye-o.png" alt="Show/Hide" />
+          </span>
+        </div>
       </div>
-
-      <div class="remember-account">
-        <label class="checkbox-container">
-          <input type="checkbox" formControlName="rememberAccount">
-          <span class="checkmark"></span>
-          Remember Account
-        </label>
+      <hr />
+      <div class="form-row">
+        <label for="verificationCode">Verification Code</label>
+        <div class="verification-row">
+          <input 
+            type="text"
+            id="verificationCode"
+            formControlName="verificationCode"
+            placeholder="Please Enter Verification ..."
+            maxlength="4"
+          />
+          <img [src]="captchaImageUrl" alt="Captcha" class="captcha-img" (click)="refreshCaptcha()" style="cursor:pointer;" title="Click to refresh" />
+        </div>
       </div>
-
+      <hr />
       <button type="submit" class="login-button" [disabled]="!loginForm.valid">
         Login
       </button>

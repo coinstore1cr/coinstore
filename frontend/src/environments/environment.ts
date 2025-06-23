@@ -1,6 +1,6 @@
 // src/environments/environment.ts
 export const environment = {
     production: false,
-    apiUrl: 'https://api.coinstorect.store/api'  // Your backend URL
+    apiUrl: 'http://localhost:3000/api'
     // Add other development-specific variables here
   };

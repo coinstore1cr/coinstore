@@ -1,74 +1,101 @@
-import { Component, OnInit, OnDestroy, NgZone } from '@angular/core';
+import { Component, OnInit, OnDestroy, NgZone, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
 @Component({
   selector: 'app-banner',
   standalone: true,
   imports: [CommonModule],
   template: `
-    <div class="banner">
-      <div class="banner-content">
-        <img class="image" *ngFor="let banner of banners; let i = index" 
-             [src]="banner" 
-             [alt]="'Banner Image ' + (i + 1)" 
-             [class.active]="i === currentIndex">
+    <div class="banner-wrapper">
+      <div class="banner-container">
+        <div class="banner-slide" 
+             *ngFor="let banner of banners; let i = index"
+             [class.active]="i === currentIndex"
+             [style.transform]="'translateX(' + (i - currentIndex) * 100 + '%)'">
+          <img [src]="banner" 
+               [alt]="'Banner Image ' + (i + 1)"
+               (load)="onImageLoad($event)">
+        </div>
+        
+        <!-- Dots Navigation -->
+        <div class="dots-container">
+          <button class="dot" 
+                  *ngFor="let banner of banners; let i = index" 
+                  [class.active]="i === currentIndex"
+                  (click)="setCurrentIndex(i)">
+          </button>
+        </div>
       </div>
-      <div class="dot-indicators">
-        <span *ngFor="let banner of banners; let i = index" 
-              [class.active]="i === currentIndex" 
-              (click)="setCurrentIndex(i)">
-        </span>
-      </div>
-      <div class="floating-coins"></div>
     </div>
   `,
   styles: [`
-    .banner {
+    .banner-wrapper {
+      width: 100%;
+      height: 40vh;
       background: linear-gradient(45deg, #000428, #004e92);
+      overflow: hidden;
+      position: relative;
+    }
+
+    .banner-container {
+      width: 100%;
+      height: 100%;
       position: relative;
       overflow: hidden;
-      max-height:20vh;
     }
-    .image{
-      height:50vh
-    }
-    .banner-content img {
-      margin-top:-45vh;
-      width: 100%;
-      height: 100vh;
-      display: none;
-      transition: opacity 1s ease-in-out;
-    }
-    .banner-content img.active {
-      display: block;
-    }
-    .dot-indicators {
+
+    .banner-slide {
       position: absolute;
-      bottom: 10px;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: transform 0.5s ease-in-out;
+      will-change: transform;
+    }
+
+    .banner-slide img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      transition: opacity 0.3s ease-in-out;
+    }
+
+    /* Dots Navigation */
+    .dots-container {
+      position: absolute;
+      bottom: 20px;
       left: 50%;
       transform: translateX(-50%);
       display: flex;
-      gap: 10px;
+      gap: 8px;
+      z-index: 2;
     }
-    .dot-indicators span {
-      width: 10px;
-      height: 10px;
-      background-color: #ccc;
+
+    .dot {
+      width: 8px;
+      height: 8px;
       border-radius: 50%;
+      background: rgba(255, 255, 255, 0.3);
+      border: none;
       cursor: pointer;
-      transition: background-color 0.3s ease;
+      padding: 0;
+      transition: background-color 0.3s ease, transform 0.2s ease;
     }
-    .dot-indicators span.active {
-      background-color: #ffd700;
+
+    .dot:hover {
+      transform: scale(1.2);
     }
-    .floating-coins {
-      position: absolute;
-      right: 0;
-      top: 0;
-      bottom: 0;
-      width: 40%;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: right center;
+
+    .dot.active {
+      background:rgb(252, 251, 250);
+    }
+
+    @media (max-width: 768px) {
+      .banner-wrapper {
+        height: 30vh;
+      }
     }
   `]
 })
@@ -76,12 +103,52 @@ export class BannerComponent implements OnInit, OnDestroy {
   banners: string[] = [
     'assets/images/banner1.png',
     'assets/images/banner2.png',
-    'assets/images/banner3.png'
+    'assets/images/banner3.png',
+    'assets/images/banner4.png'
   ];
   currentIndex: number = 0;
   private intervalId: any;
+  private touchStartX: number = 0;
+  private touchEndX: number = 0;
 
   constructor(private ngZone: NgZone) {}
+
+  @HostListener('touchstart', ['$event'])
+  onTouchStart(event: TouchEvent) {
+    this.touchStartX = event.touches[0].clientX;
+  }
+
+  @HostListener('touchend', ['$event'])
+  onTouchEnd(event: TouchEvent) {
+    this.touchEndX = event.changedTouches[0].clientX;
+    this.handleSwipe();
+  }
+
+  private handleSwipe() {
+    const swipeDistance = this.touchEndX - this.touchStartX;
+    const minSwipeDistance = 50;
+
+    if (Math.abs(swipeDistance) > minSwipeDistance) {
+      if (swipeDistance > 0) {
+        this.navigate(-1); // Swipe right
+      } else {
+        this.navigate(1); // Swipe left
+      }
+    }
+  }
+
+  onImageLoad(event: Event) {
+    const img = event.target as HTMLImageElement;
+    if (img.naturalHeight > img.naturalWidth) {
+      img.style.objectFit = 'contain';
+      img.style.width = 'auto';
+      img.style.height = '100%';
+    } else {
+      img.style.objectFit = 'contain';
+      img.style.width = '100%';
+      img.style.height = 'auto';
+    }
+  }
 
   ngOnInit(): void {
     this.startCarousel();
@@ -89,7 +156,7 @@ export class BannerComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     if (this.intervalId) {
-      clearInterval(this.intervalId); // Clear the interval when the component is destroyed
+      clearInterval(this.intervalId);
     }
   }
 
@@ -97,13 +164,22 @@ export class BannerComponent implements OnInit, OnDestroy {
     this.ngZone.runOutsideAngular(() => {
       this.intervalId = setInterval(() => {
         this.ngZone.run(() => {
-          this.currentIndex = (this.currentIndex + 1) % this.banners.length;
+          this.navigate(1);
         });
-      }, 3000); // Change banner every 2 seconds
+      }, 5000);
     });
+  }
+
+  navigate(direction: number): void {
+    this.currentIndex = (this.currentIndex + direction + this.banners.length) % this.banners.length;
   }
 
   setCurrentIndex(index: number): void {
     this.currentIndex = index;
+    // Reset the timer when manually changing slides
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+      this.startCarousel();
+    }
   }
 }

@@ -1,38 +1,40 @@
 <main class="main-content">
-  <div *ngIf="countdown>0; else noData">
-    
+  <div *ngIf="orderData && timeLeft > 0; else noData">
     <div class="trade-data-row">
-      <span class="trade-data-label">Name:</span>
+      <span class="trade-data-label">Name</span>
       <span class="trade-data-value">{{ orderData.name }}</span>
     </div>
+    <div class="trade-data-row">
+      <span class="trade-data-label">Opening Time</span>
+      <span class="trade-data-value">{{ orderData.openingTime | date:'yyyy/MM/dd HH:mm:ss' }}</span>
+    </div>
     <!-- <div class="trade-data-row">
-      <span class="trade-data-label">Term Code:</span>
-      <span class="trade-data-value">{{ orderData.termCode }}</span>
+      <span class="trade-data-label">Opening Price:</span>
+      <span class="trade-data-value">{{ orderData.openingPrice }}</span>
     </div> -->
     <div class="trade-data-row">
-      <span class="trade-data-label">Opening Time:</span>
-      <span class="trade-data-value">{{ orderData.openingTime }}</span>
-    </div>
-    <div class="trade-data-row">
-      <span class="trade-data-label">Opening Price:</span>
-      <span class="trade-data-value">{{ orderData.btcPrice }}</span>
+      <span class="trade-data-label">Current Price</span>
+      <span class="trade-data-value">{{ closingBtcPrice }}</span>
     </div>
     <div class="trade-data-row">
       <span class="trade-data-label">Direction</span>
-      <span class="trade-data-value" [ngStyle]="{'color': orderData.direction === 'up' ? 'green' : 'red'}"><b>{{ orderData.direction }}</b></span>
+      <span class="trade-data-value" [style.color]="orderData.direction === 'up' ? 'green' : 'red'">
+        <b>{{ orderData.direction }}</b>
+      </span>
     </div>
     <div class="trade-data-row">
-      <span class="trade-data-label">Time:</span>
-      <span class="trade-data-value">{{ formatCountdown(countdown) }}</span>
+      <span class="trade-data-label">Time Left:</span>
+      <span class="trade-data-value">{{ formatTime(timeLeft) }}</span>
     </div>
-    
     <div class="trade-data-row">
-      <span class="trade-data-label">Buy Amount:</span>
+      <span class="trade-data-label">Buy Amount</span>
       <span class="trade-data-value">{{ orderData.amount }}</span>
     </div>
   </div>
-
-  <ng-template #noData class="noData">
-    <img class="noData" src="assets/images/empty-image.png">
+  <ng-template #noData>
+    <div class="no-data">
+      <img src="assets/images/empty-image.png" alt="No active orders">
+      <p>No Data</p>
+    </div>
   </ng-template>
 </main>

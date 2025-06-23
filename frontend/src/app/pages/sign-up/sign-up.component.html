@@ -8,12 +8,9 @@
         <img src="assets/images/logo.png" alt="Coinstore" class="logo" />
       </div>
 
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="register-form">
-        <div class="form-group">
-          <label>
-            <span class="required">*</span>
-            Email Address
-          </label>
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="custom-login-form">
+        <div class="form-row">
+          <label><span class="required">*</span>Email Address</label>
           <input 
             type="email" 
             formControlName="email"
@@ -21,38 +18,49 @@
             [class.error]="isFieldInvalid('email')"
           />
         </div>
-
-        <div class="form-group">
-          <label>
-            <span class="required">*</span>
-            Password
-          </label>
-          <input 
-            type="password" 
-            formControlName="password"
-            placeholder="The New Password Must Consist of 6-16 Letters And Numbers"
-            [class.error]="isFieldInvalid('password')"
-          />
+        <div class="form-row">
+          <label><span class="required">*</span>Password</label>
+          <div class="input-with-icon">
+            <input 
+              [type]="showPassword ? 'text' : 'password'"
+              formControlName="password"
+              placeholder="The New Password Must Consist Of 6-16 Letters And Numbers"
+              [class.error]="isFieldInvalid('password')"
+            />
+            <span class="eye-icon" (click)="togglePasswordVisibility()">
+              <img src="assets/images/eye-o.png" alt="Show/Hide" />
+            </span>
+          </div>
         </div>
-
-        <div class="form-group">
-          <label>
-            <span class="required">*</span>
-            Confirm Password
-          </label>
-          <input 
-            type="password" 
-            formControlName="confirmPassword"
-            placeholder="Please Enter The Password Again"
-            [class.error]="isFieldInvalid('confirmPassword')"
-          />
+        <div class="form-row">
+          <label><span class="required">*</span>Confirm Password</label>
+          <div class="input-with-icon">
+            <input 
+              [type]="showConfirmPassword ? 'text' : 'password'"
+              formControlName="confirmPassword"
+              placeholder="Please Enter The Password Again"
+              [class.error]="isFieldInvalid('confirmPassword')"
+            />
+            <span class="eye-icon" (click)="toggleConfirmPasswordVisibility()">
+              <img src="assets/images/eye-o.png" alt="Show/Hide" />
+            </span>
+          </div>
         </div>
-
-        <div class="form-group">
-          <label>
-            <span class="required">*</span>
-            Invitation Code
-          </label>
+        <div class="form-row">
+          <label><span class="required">*</span>Verification Code</label>
+          <div class="verification-row">
+            <input 
+              type="text"
+              formControlName="verificationCode"
+              placeholder="Please Enter Verification ..."
+              maxlength="4"
+              [class.error]="isFieldInvalid('verificationCode')"
+            />
+            <img [src]="captchaImageUrl" alt="Captcha" class="captcha-img" (click)="refreshCaptcha()" style="cursor:pointer;" title="Click to refresh" />
+          </div>
+        </div>
+        <div class="form-row">
+          <label><span class="required">*</span>Invitation Code</label>
           <input 
             type="text" 
             formControlName="invitationCode"
@@ -60,14 +68,11 @@
             [class.error]="isFieldInvalid('invitationCode')"
           />
         </div>
-
         <button type="submit" class="register-button" [disabled]="registerForm.invalid">
           Register
         </button>
-
         <div class="form-footer">
-          <a href="#" class="footer-link">Email Registration</a>
-          <a routerLink="/login" class="footer-link">Login</a>
+          <a routerLink="/login" class="footer-link" style="margin-left:auto;">Login</a>
         </div>
       </form>
     </main>

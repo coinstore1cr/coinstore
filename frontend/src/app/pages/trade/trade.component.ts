@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 import { TradingViewComponent } from './components/trading-view/trading-view.component';
 import { TradingControlsComponent } from './components/trading-controls/trading-controls.component';
 import { MarketStatsComponent } from './components/market-stats/market-stats.component';
@@ -30,10 +31,10 @@ import { MarketStatsComponent } from './components/market-stats/market-stats.com
         
         <div class="trading-pair">
           <div class="pair-header">
-            <h1>BTC/USDT</h1>
-            <span class="change positive">+0.01%</span>
+            <h1>{{symbol}}/USDT</h1>
+            <span class="change" [class.positive]="isPositiveChange" [class.negative]="!isPositiveChange">{{change}}</span>
           </div>
-          
+          <div class="current-price">{{price}}</div>
         </div>
       </div>
 
@@ -44,29 +45,28 @@ import { MarketStatsComponent } from './components/market-stats/market-stats.com
   `,
   styles: [`
     .trade-container {
-
-    position:relative;
-    z-index:1;
+      position: relative;
+      z-index: 1;
       background-color: #1a1f2a;
       min-height: 90vh;
       padding-bottom: 60px;
     }
 
     .trade-container::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 999; /* Behind popup but above parent content */
-  display: none;
-}
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 999;
+      display: none;
+    }
 
-.trade-container.popup-active::before {
-  display: block; /* Show overlay only when popup is active */
-}
+    .trade-container.popup-active::before {
+      display: block;
+    }
 
     .trade-header {
       padding: 1rem;
@@ -117,6 +117,10 @@ import { MarketStatsComponent } from './components/market-stats/market-stats.com
       color: #4caf50;
     }
 
+    .change.negative {
+      color: #ff4d4d;
+    }
+
     .current-price {
       font-size: 2rem;
       color: #ffffff;
@@ -124,8 +128,27 @@ import { MarketStatsComponent } from './components/market-stats/market-stats.com
     }
   `]
 })
-export class TradeComponent {
-  activeTab: 'secondContract' | 'futuresTrading' = 'secondContract'; // Default active tab
+export class TradeComponent implements OnInit {
+  activeTab: 'secondContract' | 'futuresTrading' = 'secondContract';
+  symbol: string = 'BTC';
+  name: string = 'Bitcoin';
+  price: string = '0';
+  change: string = '0%';
+  isPositiveChange: boolean = true;
+
+  constructor(private route: ActivatedRoute) {}
+
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => {
+      if (params['symbol']) {
+        this.symbol = params['symbol'];
+        this.name = params['name'];
+        this.price = params['price'];
+        this.change = params['change'];
+        this.isPositiveChange = this.change.startsWith('+');
+      }
+    });
+  }
 
   setActiveTab(tab: 'secondContract' | 'futuresTrading'): void {
     this.activeTab = tab;

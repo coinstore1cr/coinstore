@@ -1,4 +1,7 @@
 // main.ts
+import './assets/primeng-theme.css';
+import './assets/primeicons.css';
+
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideHttpClient, withFetch } from '@angular/common/http'; // Add withFetch
 import { AppComponent } from './app/app.component';

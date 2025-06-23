@@ -4,18 +4,26 @@ import { UserService } from '../../services/user.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
 import { UserDataService } from '../../services/user-data.service';
-
+import { MessageService } from 'primeng/api';
+import { ToastModule } from 'primeng/toast';
+import { LogoutDialogComponent } from './logout-dialog/logout-dialog.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule],
+  imports: [
+    CommonModule,
+    ToastModule,
+    LogoutDialogComponent
+  ],
+  providers: [MessageService],
   templateUrl: './mine.component.html',
   styleUrls: ['./mine.component.css']
 })
 export class MineComponent implements OnInit {
   userData: any;
   loading = true;
+  showLogoutDialog = false;
 
   navigationItems = [
     { label: 'Deposit' },
@@ -25,10 +33,11 @@ export class MineComponent implements OnInit {
   ];
 
   constructor(
-    private userService: UserService, 
+    private userService: UserService,
     private authService: AuthService,
-    private router:Router,
-    private userdataService:UserDataService,
+    private router: Router,
+    private userdataService: UserDataService,
+    private messageService: MessageService
   ) {}
 
   ngOnInit() {
@@ -66,9 +75,19 @@ export class MineComponent implements OnInit {
       this.userData.balance = updatedUser.balance;
       
       // Optional: Show feedback
+      this.messageService.add({
+        severity: 'success',
+        summary: 'Success',
+        detail: 'Balance updated successfully'
+      });
     } catch (error) {
       console.error('Balance refresh failed:', error);
       // Handle error (e.g., show toast message)
+      this.messageService.add({
+        severity: 'error',
+        summary: 'Error',
+        detail: 'Failed to update balance'
+      });
     }
   }
 
@@ -76,15 +95,32 @@ export class MineComponent implements OnInit {
 
 
   logout() {
+    this.showLogoutDialog = true;
+  }
+
+  onLogoutConfirm() {
+    this.showLogoutDialog = false;
     this.authService.logout().subscribe({
       next: () => {
-                this.router.navigate(['/login']); 
+        this.messageService.add({
+          severity: 'success',
+          summary: 'Success',
+          detail: 'Logged out successfully'
+        });
+        this.router.navigate(['/login']);
       },
       error: (error) => {
         console.error('Logout failed:', error);
-       
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Error',
+          detail: 'Failed to logout'
+        });
       }
     });
   }
-  
+
+  onLogoutCancel() {
+    this.showLogoutDialog = false;
+  }
 }

@@ -1,7 +1,7 @@
 <div class="trading-popup">
   <header class="popup-header">
     <div class="pair-info">
-      <span class="pair">BTC/USDT</span>
+      <span class="pair">{{symbol}}/USDT</span>
       <span
         class="direction"
         [class.up]="currentDirection === 'up'"
@@ -67,3 +67,5 @@
 
   <button class="submit-btn" (click)="onSubmit()">Submit</button>
 </div>
+
+<p-toast></p-toast>
