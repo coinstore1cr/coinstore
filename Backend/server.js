@@ -15,8 +15,24 @@ dotenv.config();
 const app = express();
 
 // CORS configuration
+const allowedOrigins = [
+    'https://paxfulct.store',
+    'https://www.paxfulct.store',
+    'http://localhost:4200' // Keep for local development
+];
+
 app.use(cors({
-    origin: 'http://localhost:4200',
+    origin: (origin, callback) => {
+        // Allow requests with no origin (e.g., Postman, curl)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'HEAD'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
 
