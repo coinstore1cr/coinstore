@@ -2,9 +2,9 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "index.js",
-  "type":"module",
+  "type": "module",
   "exports": {
-  "default": "./index.js"
+    "default": "./index.js"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -25,6 +25,8 @@
     "express-session": "^1.18.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.10.1",
-    "pg": "^8.13.3"
+    "pg": "^8.13.3",
+    "redis": "^4.6.13",
+    "vite": "^6.3.5"
   }
 }
