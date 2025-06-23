@@ -17,12 +17,12 @@ import { ButtonModule } from 'primeng/button';
         </div>
         <div class="dialog-footer">
           <button pButton 
-            class="p-button-text" 
+            class="p-button-text logout-cancel-btn" 
             label="Cancel" 
             (click)="cancel.emit()">
           </button>
           <button pButton 
-            class="p-button-warning" 
+            class="p-button-warning logout-confirm-btn" 
             label="Logout" 
             (click)="confirm.emit()">
           </button>
@@ -78,6 +78,7 @@ import { ButtonModule } from 'primeng/button';
     :host ::ng-deep .p-button.p-button-warning {
       background: #ffce1c;
       color: black;
+      
     }
 
     :host ::ng-deep .p-button.p-button-warning:hover {
@@ -90,6 +91,19 @@ import { ButtonModule } from 'primeng/button';
 
     :host ::ng-deep .p-button.p-button-text:hover {
       background: rgba(255, 255, 255, 0.1);
+    }
+
+    .logout-cancel-btn {
+      min-width: 100px;
+      font-size: 1.1rem;
+      padding: 0.75rem 1.5rem;
+    }
+
+    .logout-confirm-btn {
+      min-width: 100px;
+      font-size: 1.1rem;
+      padding: 0.75rem 1.5rem;
+      border-radius: 4px;
     }
   `]
 })
