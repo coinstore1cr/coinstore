@@ -17,7 +17,7 @@ interface NavItem {
   standalone: true,
   imports: [NgFor, NgIf],
   template: `
-    <nav class="bottom-nav" *ngIf="isLoggedIn && !isAuthPage">
+    <nav class="bottom-nav" *ngIf="isLoggedIn">
       <a *ngFor="let item of navItems" 
          href="#"
          (click)="navigate(item.route); $event.preventDefault()"
@@ -77,7 +77,6 @@ export class BottomNavComponent implements OnInit, OnDestroy {
   ];
 
   isLoggedIn = false;
-  isAuthPage = false;
   private authSubscription: Subscription | null = null;
   private routerSubscription: Subscription | null = null;
 
@@ -99,11 +98,8 @@ export class BottomNavComponent implements OnInit, OnDestroy {
     this.routerSubscription = this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         this.updateActiveState(event.urlAfterRedirects);
-        this.isAuthPage = this.checkIfAuthPage(event.urlAfterRedirects);
       }
     });
-    // Initial check
-    this.isAuthPage = this.checkIfAuthPage(this.router.url);
   }
 
   ngOnDestroy() {
@@ -149,9 +145,10 @@ export class BottomNavComponent implements OnInit, OnDestroy {
 
     // Find the matching base route
     const matchingItem = this.navItems.find(item => {
-      // For trade route, also match trading popup
+      // For trade route, also match trading popup and allow query params
       if (item.route === '/trade') {
-        return currentRoute === '/trade' || currentRoute.startsWith('/trade/trading-popup');
+        // Match /trade, /trade?..., /tradingpopup, /trade/tradingpopup, etc.
+        return currentRoute.startsWith('/trade') || currentRoute.startsWith('/tradingpopup');
       }
       // For record route, match both open-order and history
       if (item.route === '/record/open-order') {
@@ -164,9 +161,5 @@ export class BottomNavComponent implements OnInit, OnDestroy {
     if (matchingItem) {
       matchingItem.active = true;
     }
-  }
-
-  checkIfAuthPage(url: string): boolean {
-    return url.startsWith('/login') || url.startsWith('/signup');
   }
 }

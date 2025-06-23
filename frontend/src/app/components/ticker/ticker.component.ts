@@ -114,6 +114,15 @@ export class TickerComponent implements OnInit, OnDestroy {
 
   // Navigate to TradeComponent with the selected symbol
   navigateToTrade(symbol: string) {
-    this.router.navigate(['/trade']);
+    // Find the ticker item for name, price, change
+    const item = this.tickerData.find(t => t.symbol === symbol);
+    this.router.navigate(['/trade'], {
+      queryParams: {
+        symbol: item?.symbol || symbol,
+        name: item?.symbol || symbol,
+        price: item?.price || '0',
+        change: item?.change || '0%'
+      }
+    });
   }
 }
